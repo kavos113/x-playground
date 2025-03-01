@@ -8,7 +8,6 @@ char *display_name = NULL; // if null, the value of the DISPLAY environment vari
 Screen* screen;
 
 int main(int argc, char** argv) {
-    // just unsigned long (Window ID)
     int x = 0, y = 0;
     char* window_name = "Hello, World!";
     XSizeHints size_hints;
