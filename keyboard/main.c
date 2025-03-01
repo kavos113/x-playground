@@ -29,6 +29,7 @@ int main() {
 
 
     XSelectInput(display, window, ExposureMask | KeyPressMask);
+    //XSelectInput(display, window, ExposureMask);
 
     XMapWindow(display, window);
 
