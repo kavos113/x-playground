@@ -10,7 +10,6 @@ typedef struct
 {
     Display *display;
     Window window;
-    Atom close_event;
 } CloseWindowArgs;
 
 void *close_window(void *arg)
@@ -20,7 +19,13 @@ void *close_window(void *arg)
     CloseWindowArgs *args = arg;
     Display *target_display = args->display;
     Window target_window = args->window;
-    Atom target_close_event = args->close_event;
+
+    Atom target_close_event = XInternAtom(target_display, "WM_DELETE_WINDOW", False);
+    if (target_close_event == None)
+    {
+        fprintf(stderr, "couldn't get close event atom\n");
+        return NULL;
+    }
 
     XEvent event = {};
     event.type = ClientMessage;
@@ -148,18 +153,9 @@ int main(int argc, char **argv)
 
     XMapWindow(display, window);
 
-    Atom wm_delete_window = XInternAtom(display, "WM_DELETE_WINDOW", False);
-    status = XSetWMProtocols(display, window, &wm_delete_window, 1);
-    if (status == 0)
-    {
-        fprintf(stderr, "couldn't set WM protocols\n");
-        return 1;
-    }
-
     CloseWindowArgs args;
     args.display = display;
     args.window = window;
-    args.close_event = wm_delete_window;
     pthread_t thread;
     int ret = pthread_create(&thread, NULL, close_window, &args);
     if (ret != 0)
