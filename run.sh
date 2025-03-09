@@ -16,4 +16,10 @@ case "$1" in
     run)
         run "$2"
         ;;
+    *)
+        echo "Usage:"
+        echo "  $0 build"
+        echo "  $0 run <project>"
+        exit 1
+        ;;
 esac
